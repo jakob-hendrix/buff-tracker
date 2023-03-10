@@ -1,24 +1,13 @@
-﻿<div class="container">
+﻿@inject BuffTrackerState BuffTrackerState
+@inject TimelineEngine TimelineEngine;
+
+<div class="container">
     <h3>Timeline</h3>
-    <p role="status">Current Round: @currentRound</p>
-    <button class="btn btn-primary" @onclick="AddRound">Add Round</button>
-    <button class="btn btn-primary" @onclick="SubtractRound">Subtract Round</button>
+    <p role="status">Current Round: @BuffTrackerState.CurrentRound</p>
+    <button class="btn btn-primary" @onclick="@TimelineEngine.IncrementRound">Add Round</button>
+    <button class="btn btn-primary" @onclick="@TimelineEngine.DecrementRound">Subtract Round</button>
 </div>
 
 @code {
-    private int currentRound = 0;
 
-    private void AddRound()
-    {
-        currentRound++;
-    }
-
-    private void SubtractRound()
-    {
-        currentRound--;
-        if (currentRound < 0)
-        {
-            currentRound = 0;
-        }
-    }
 }
