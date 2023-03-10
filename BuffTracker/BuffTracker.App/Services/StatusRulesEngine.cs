@@ -1,6 +1,6 @@
 ﻿namespace BuffTracker.App.Services
 {
-    public class RulesEngine
+    public class StatusRulesEngine
     {
     }
 }

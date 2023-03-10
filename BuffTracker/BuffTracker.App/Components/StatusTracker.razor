@@ -12,29 +12,22 @@
         </tr>
         </thead>
         <tbody>
-            @foreach (var effect in statusEffects)
+            @foreach (var effect in BuffTrackerState.StatusEffects)
             {
                 <tr>
-                    <td>@effect.Name</td>
-                    <td>@effect.MaxDurationInRounds</td>
-                    <td>@effect.RoundWhenCast</td>
-                    <td>@effect.RemainingRounds</td>
+                    <td>@effect.StatusEffect.Name</td>
+                    <td>@effect.StatusEffect.MaxDurationInRounds</td>
+                    <td>@effect.StatusEffect.RoundWhenCast</td>
+                    <td>@effect.StatusEffect.RemainingRounds</td>
                 </tr>
             }
         </tbody>
+
+        <input placeholder="Add a condition..." />
+        <button>Add condition</button>
     </table>
 </div>
 
 @code {
-
-    private IEnumerable<StatusEffect> statusEffects = new[]
-    {
-        new StatusEffect { Name = "Haste", MaxDurationInRounds = 5, RoundWhenCast = 1},
-        new StatusEffect { Name = "Staggered", MaxDurationInRounds = 1, RoundWhenCast = 2},
-    };
-
-    protected override void OnInitialized()
-    {
-    }
 
 }

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\BuffTracker.App\BuffTracker.App.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
