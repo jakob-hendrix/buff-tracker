@@ -5,29 +5,84 @@
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
+            <th>Enable Editing?</th>
             <th>Name</th>
             <th>Max Duration (Rounds)</th>
             <th>Round When Cast</th>
             <th>Remaining Rounds</th>
+            <th>Remove Condition?</th>
         </tr>
         </thead>
         <tbody>
             @foreach (var effect in BuffTrackerState.StatusEffects)
             {
-                <tr>
-                    <td>@effect.StatusEffect.Name</td>
-                    <td>@effect.StatusEffect.MaxDurationInRounds</td>
-                    <td>@effect.StatusEffect.RoundWhenCast</td>
-                    <td>@effect.StatusEffect.RemainingRounds</td>
-                </tr>
+                if (effect.IsBeingEdited)
+                {
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-link" style="background-color:aqua" @onclick="() => EnableEditing(false, effect)">
+                                <i class="fas fa-window-close" />
+                            </button>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="Give the effect a name" @bind="@effect.StatusEffect.Name" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" placeholder="Enter the duration in rounds" @bind="@effect.StatusEffect.MaxDurationInRounds" min="0" max="65535" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" placeholder="Enter the round the effect began" @bind="@effect.StatusEffect.RoundWhenCast" min="0" max="65535" />
+                        </td>
+                        <td>@effect.StatusEffect.RemainingRounds</td>
+                        <td>
+                            <button @onclick="() => RemoveStatus(effect)">
+                                X
+                            </button>
+                        </td>
+                    </tr>
+
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-link" style="background-color:aqua" @onclick="() => EnableEditing(true, effect)">
+                                <i class="fas fa-pen" />
+                            </button>
+                        </td>
+                        <td>@effect.StatusEffect.Name</td>
+                        <td>@effect.StatusEffect.MaxDurationInRounds</td>
+                        <td>@effect.StatusEffect.RoundWhenCast</td>
+                        <td>@effect.StatusEffect.RemainingRounds</td>
+                        <td>
+                            <button @onclick="() => RemoveStatus(effect)">
+                                X
+                            </button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
-
-        <input placeholder="Add a condition..." />
-        <button>Add condition</button>
     </table>
+    <button @onclick="() => AddNewEffect()">Add new effect</button>
 </div>
 
 @code {
+    private void EnableEditing(bool flag, StatusEffectViewModel effect)
+    {
+        effect.IsBeingEdited = flag;
+    }
+    private void RemoveStatus(StatusEffectViewModel effect)
+    {
+        BuffTrackerState.StatusEffects.Remove(effect);
+    }
 
+    private void AddNewEffect()
+    {
+        var newEffect = new StatusEffect();
+        var newViewModel = new StatusEffectViewModel(newEffect);
+        BuffTrackerState.StatusEffects.Add(newViewModel);
+
+        // TODO: don't allow a new item to be added if the bottom item has blank fields
+    }
 }
