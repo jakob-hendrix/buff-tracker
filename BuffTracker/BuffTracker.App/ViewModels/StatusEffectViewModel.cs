@@ -1,4 +1,6 @@
-﻿namespace BuffTracker.App.Models
+﻿using BuffTracker.App.Models;
+
+namespace BuffTracker.App.ViewModels
 {
     public class StatusEffectViewModel
     {
@@ -9,6 +11,6 @@
         }
 
         public StatusEffect StatusEffect { get; }
-        public bool IsBeingEdited {  get; set; }
+        public bool IsBeingEdited { get; set; }
     }
 }

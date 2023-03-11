@@ -1,10 +1,9 @@
 ﻿using BuffTracker.App.Models;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using BuffTracker.App.ViewModels;
 
 namespace BuffTracker.App.Services;
 
-public class BuffTrackerState : INotifyPropertyChanged
+public class BuffTrackerState : NotifyPropertyChangedBase
 {
     private int _currentRound;
 
@@ -28,15 +27,9 @@ public class BuffTrackerState : INotifyPropertyChanged
 
     public int CurrentRound
     {
-        get => _currentRound; 
-        set
-        {
-            _currentRound = value;
-            OnPropertyChanged(nameof(CurrentRound));
-        } 
+        get => _currentRound;
+        set => SetProperty(ref _currentRound, value);
     } 
-    public List<StatusEffectViewModel> StatusEffects { get; set; }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected virtual void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    public List<StatusEffectViewModel> StatusEffects { get; set; }
 }

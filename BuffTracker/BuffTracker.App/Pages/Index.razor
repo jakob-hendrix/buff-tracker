@@ -1,12 +1,39 @@
 ﻿@page "/"
 
+@using System.ComponentModel;
+@inject BuffTrackerViewModel BuffTrackerViewModel
+@implements IDisposable
+
 <PageTitle>Index</PageTitle>
 
-<div class="page-content">
-    <div style="padding-bottom: 1rem">
-        <Timeline />
-    </div>
-    <div>
-        <StatusTracker />
-    </div>
-</div>
+<CascadingValue Value="@BuffTrackerViewModel" Name="BuffTrackerViewModel">
+    <Timeline />
+    <StatusTracker />
+</CascadingValue>
+
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        BuffTrackerViewModel.AppState.PropertyChanged += async (sender, e) => 
+            await InvokeAsync(() => 
+            { 
+                StateHasChanged(); 
+            });
+        await base.OnInitializedAsync();
+
+    }
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        BuffTrackerViewModel.AppState.PropertyChanged -= OnPropertyChangedHandler;
+    }
+}

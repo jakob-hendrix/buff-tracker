@@ -1,4 +1,6 @@
-﻿namespace BuffTracker.App.Services
+﻿using BuffTracker.App.Models;
+
+namespace BuffTracker.App.Services
 {
     public class StatusRulesEngine
     {
@@ -9,6 +11,9 @@
             _appState = appState;
         }
 
-
+        public int CalculateRemainingRounds(StatusEffect effect)
+        {
+            return effect.RoundWhenCast + effect.MaxDurationInRounds - _appState.CurrentRound;
+        }
     }
 }

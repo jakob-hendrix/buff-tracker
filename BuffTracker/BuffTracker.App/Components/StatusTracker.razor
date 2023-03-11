@@ -1,6 +1,4 @@
-﻿@inject BuffTrackerState BuffTrackerState
-
-<div class="container">
+﻿<div class="container">
     <h3>Buffs & Conditions</h3>
     <table class="table table-striped table-bordered">
         <thead>
@@ -14,7 +12,7 @@
         </tr>
         </thead>
         <tbody>
-            @foreach (var effect in BuffTrackerState.StatusEffects)
+            @foreach (var effect in ViewModel.AppState.StatusEffects)
             {
                 if (effect.IsBeingEdited)
                 {
@@ -33,7 +31,7 @@
                         <td>
                             <input type="number" class="form-control" placeholder="Enter the round the effect began" @bind="@effect.StatusEffect.RoundWhenCast" min="0" max="65535" />
                         </td>
-                        <td>@effect.StatusEffect.RemainingRounds</td>
+                        <td>@ViewModel.StatusRulesEngine.CalculateRemainingRounds(effect.StatusEffect)</td>
                         <td>
                             <button @onclick="() => RemoveStatus(effect)">
                                 X
@@ -53,7 +51,7 @@
                         <td>@effect.StatusEffect.Name</td>
                         <td>@effect.StatusEffect.MaxDurationInRounds</td>
                         <td>@effect.StatusEffect.RoundWhenCast</td>
-                        <td>@effect.StatusEffect.RemainingRounds</td>
+                        <td>@ViewModel.StatusRulesEngine.CalculateRemainingRounds(effect.StatusEffect)</td>
                         <td>
                             <button @onclick="() => RemoveStatus(effect)">
                                 X
@@ -70,20 +68,23 @@
 </div>
 
 @code {
+    [CascadingParameter(Name = "BuffTrackerViewModel")]
+    BuffTrackerViewModel ViewModel { get; set; }
+
     private void EnableEditing(bool flag, StatusEffectViewModel effect)
     {
         effect.IsBeingEdited = flag;
     }
     private void RemoveStatus(StatusEffectViewModel effect)
     {
-        BuffTrackerState.StatusEffects.Remove(effect);
+        ViewModel.AppState.StatusEffects.Remove(effect);
     }
 
     private void AddNewEffect()
     {
         var newEffect = new StatusEffect();
         var newViewModel = new StatusEffectViewModel(newEffect);
-        BuffTrackerState.StatusEffects.Add(newViewModel);
+        ViewModel.AppState.StatusEffects.Add(newViewModel);
 
         // TODO: don't allow a new item to be added if the bottom item has blank fields
     }
