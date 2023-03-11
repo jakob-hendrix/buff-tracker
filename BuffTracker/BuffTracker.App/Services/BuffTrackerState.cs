@@ -1,5 +1,6 @@
 ﻿using BuffTracker.App.Models;
 using BuffTracker.App.ViewModels;
+using static System.Net.WebRequestMethods;
 
 namespace BuffTracker.App.Services;
 
@@ -11,7 +12,7 @@ public class BuffTrackerState : NotifyPropertyChangedBase
     {
         var statusSeeds = new List<StatusEffect>
         {
-            new StatusEffect { Name = "Haste", MaxDurationInRounds = 5, RoundWhenCast = 1},
+            new StatusEffect { Name = "Haste", MaxDurationInRounds = 5, RoundWhenCast = 1, URL = @"https://www.aonprd.com/SpellDisplay.aspx?ItemName=Haste", SpellLevel = 3, CasterLevel = 3, DurationType = "1 round/level"},
             new StatusEffect { Name = "Staggered", MaxDurationInRounds = 1, RoundWhenCast = 2},
         };
 

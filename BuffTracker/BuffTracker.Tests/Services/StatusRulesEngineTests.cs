@@ -29,4 +29,16 @@ public class StatusRulesEngineTests
 
         Assert.That(remainingRounds == 0);
     }
+
+    [Test]
+    public void CastRoundAfterCurrentRound_DurationIsZero()
+    {
+        _state.CurrentRound = 1;
+        var effect = new StatusEffect { RoundWhenCast = 2, MaxDurationInRounds = 1 };
+
+        var remainingRounds = _statusRulesEngine.CalculateRemainingRounds(effect);
+
+        Assert.That(effect.RoundWhenCast > _state.CurrentRound);
+        Assert.That(remainingRounds == 0);
+    }
 }

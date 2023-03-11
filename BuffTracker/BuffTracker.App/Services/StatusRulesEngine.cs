@@ -13,7 +13,12 @@ namespace BuffTracker.App.Services
 
         public int CalculateRemainingRounds(StatusEffect effect)
         {
-            return effect.RoundWhenCast + effect.MaxDurationInRounds - _appState.CurrentRound;
+            int remainingRounds = 0;
+            if (effect.RoundWhenCast <= _appState.CurrentRound)
+            {
+                remainingRounds = effect.RoundWhenCast + effect.MaxDurationInRounds - _appState.CurrentRound;
+            }
+            return remainingRounds;
         }
     }
 }
