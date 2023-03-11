@@ -34,11 +34,40 @@ namespace BuffTracker.App.Services
             {
                 return "not yet taken effect";
             }
-                
 
-            return $"{remainingRounds}";
+
+            string timeLeft = RoundsToTime(remainingRounds);
+            return $"{remainingRounds} ({timeLeft})";
         }
 
+        public string RoundsToTime(int rounds)
+        {
+            double counter = rounds;
+
+            if (rounds < 0)
+                throw new ArgumentOutOfRangeException(nameof(rounds));
+
+            // break down the rounds: 1 r = 6s = 1/10m = 1/600h = 1/14400d
+            var days = Math.Floor(counter / 14400);
+            counter -= days * 14400;
+
+            var hours = Math.Floor(counter / 600);
+            counter -= hours * 600;
+
+            var minutes = Math.Floor(counter / 10);
+            counter -= minutes * 10;
+
+            var seconds = counter * 6;
+
+            // TODO: string builder?
+            string dayDisplay = days > 0 ? $"{days}d " : "";
+            string hourDisplay = hours > 0 ? $"{hours}h " : "";
+            string minuteDisplay = minutes > 0 ? $"{minutes}m " : "";
+            string secondDisplay = seconds > 0 ? $"{seconds}s " : "";
+            string timeDisplay = $"{dayDisplay}{hourDisplay}{minuteDisplay}{secondDisplay}";
+
+            return timeDisplay.TrimEnd();
+        }
 
         public int CalculateRemainingRounds(StatusEffect effect)
         {
