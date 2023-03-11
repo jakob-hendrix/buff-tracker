@@ -3,7 +3,11 @@
 
 <div class="container">
     <h1>Timeline</h1>
-    <h3 role="status">Current Round: @BuffTrackerState.CurrentRound</h3>
+    
+    @*<h3 role="status">Current Round: @BuffTrackerState.CurrentRound</h3>*@
+    <input  class="form-control form-control-lg" type="number" step="any" 
+            style="width: 10rem"
+            @bind-value:event="onchange" @bind-value=@BuffTrackerState.CurrentRound />
     <button class="btn btn-primary" @onclick="@TimelineEngine.IncrementRound">Add Round</button>
     <button class="btn btn-primary" @onclick="@TimelineEngine.DecrementRound">Subtract Round</button>
 </div>
