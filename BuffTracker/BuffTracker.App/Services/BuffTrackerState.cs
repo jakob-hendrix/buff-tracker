@@ -12,7 +12,7 @@ public class BuffTrackerState : NotifyPropertyChangedBase
     {
         var statusSeeds = new List<StatusEffect>
         {
-            new StatusEffect { Name = "Haste", MaxDurationInRoundsOverride = 5, RoundWhenCast = 1, URL = @"https://www.aonprd.com/SpellDisplay.aspx?ItemName=Haste", SpellLevel = 3, CasterLevel = 3 },
+            new StatusEffect { Name = "Haste", RoundWhenCast = 1, URL = @"https://www.aonprd.com/SpellDisplay.aspx?ItemName=Haste", SpellLevel = 3, CasterLevel = 3, DurationUnit = DurationUnit.Rounds, UnitRatio = 1},
             new StatusEffect { Name = "Staggered", MaxDurationInRoundsOverride = 1, RoundWhenCast = 2}
         };
 

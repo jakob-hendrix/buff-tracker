@@ -7,13 +7,13 @@
             <th>Name</th>
             <th>Active?</th>
             <th>Source</th>
-            <th>CL</th>
             <th>Spell Level</th>
+            <th>CL</th>
             <th>Duration Amount</th>
             <th>Duration Unit</th>
             <th>Duration</th>
+            <th>Duration Override (Rounds)</th>
             <th>Round When Cast</th>
-            <th>Max Duration (Rounds)</th>
             <th>Remaining Duration</th>
             <th>URL</th>
         </tr>
@@ -40,10 +40,10 @@
                             <input type="text" class="form-control" placeholder="Who or what caused this effect?" @bind="@effect.StatusEffect.EffectSource" />
                         </td>
                         <td>
-                            <input type="number" class="form-control" placeholder="Enter the caster level" @bind="@effect.StatusEffect.CasterLevel" min="0" max="65535" />
+                            <input type="number" class="form-control" placeholder="Enter the spell level" @bind="@effect.StatusEffect.SpellLevel" min="0" max="65535" />
                         </td>
                         <td>
-                            <input type="number" class="form-control" placeholder="Enter the spell level" @bind="@effect.StatusEffect.SpellLevel" min="0" max="65535" />
+                            <input type="number" class="form-control" placeholder="Enter the caster level" @bind="@effect.StatusEffect.CasterLevel" min="0" max="100" />
                         </td>
                         <td>
                             <input type="number" class="form-control" placeholder="Enter duration amount per unit" @bind="@effect.StatusEffect.UnitRatio" min="0" max="100" />
@@ -55,17 +55,15 @@
                                     <option value="@unit">@unit</option>
                                 }
                             </InputSelect>
-                            @*<input type="string" class="form-control" placeholder="Enter duration amount per unit" @bind="@effect.StatusEffect.UnitRatio" min="0" max="100" />*@
                         </td>
                         <td>@effect.DisplayDuration()</td>
                         <td>
-                            <input type="number" class="form-control" placeholder="Enter the round the effect began" @bind="@effect.StatusEffect.RoundWhenCast" min="0" max="65535" />
-                        </td>
-
-                        <td>
                             <input type="number" class="form-control" placeholder="Enter the duration in rounds" @bind="@effect.StatusEffect.MaxDurationInRoundsOverride" min="0" max="65535" />
                         </td>
-                        <td>@ViewModel.StatusRulesEngine.CalculateRemainingRounds(effect.StatusEffect)</td>
+                        <td>
+                            <input type="number" class="form-control" placeholder="Enter the round the effect began" @bind="@effect.StatusEffect.RoundWhenCast" min="0" />
+                        </td>
+                        <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect)</td>
                         <td>
                             <input type="text" class="form-control" placeholder="Enter a URL" @bind="@effect.StatusEffect.URL" />
                         </td>
@@ -86,14 +84,14 @@
                             <input type="checkbox" @bind="@effect.StatusEffect.IsActive" />
                         </td>
                         <td>@effect.StatusEffect.EffectSource</td>
-                        <td>@effect.StatusEffect.CasterLevel</td>
                         <td>@effect.StatusEffect.SpellLevel</td>
+                        <td>@effect.StatusEffect.CasterLevel</td>
                         <td>@effect.StatusEffect.UnitRatio</td>
                         <td>@effect.StatusEffect.DurationUnit</td>
                         <td>@effect.DisplayDuration()</td>
-                        <td>@effect.StatusEffect.RoundWhenCast</td>
                         <td>@effect.StatusEffect.MaxDurationInRoundsOverride</td>
-                        <td>@ViewModel.StatusRulesEngine.CalculateRemainingRounds(effect.StatusEffect)</td>
+                        <td>@effect.StatusEffect.RoundWhenCast</td>
+                        <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect)</td>
                         @if (!string.IsNullOrEmpty(@effect.StatusEffect.URL))
                         {
                             <td><a href="@(effect.StatusEffect.URL)" target="_blank">Link</a></td>
@@ -128,6 +126,10 @@
     private void AddNewEffect()
     {
         var newEffect = new StatusEffect();
+        if (newEffect.RoundWhenCast == 0)
+        {
+            newEffect.RoundWhenCast = ViewModel.AppState.CurrentRound;
+        }
         var newViewModel = new StatusEffectViewModel(newEffect);
         ViewModel.AppState.StatusEffects.Add(newViewModel);
 
