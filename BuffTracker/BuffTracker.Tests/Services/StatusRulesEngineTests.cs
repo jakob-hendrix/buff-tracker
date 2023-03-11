@@ -22,7 +22,7 @@ public class StatusRulesEngineTests
     public void IncrementRound_DurationRunsOut()
     {
         _state.CurrentRound = 1;
-        var effect = new StatusEffect { RoundWhenCast = 1, MaxDurationInRounds = 1 };
+        var effect = new StatusEffect { RoundWhenCast = 1, MaxDurationInRoundsOverride = 1 };
 
         _timelineEngine.IncrementRound();
         var remainingRounds = _statusRulesEngine.CalculateRemainingRounds(effect);
@@ -34,11 +34,11 @@ public class StatusRulesEngineTests
     public void CastRoundAfterCurrentRound_DurationIsZero()
     {
         _state.CurrentRound = 1;
-        var effect = new StatusEffect { RoundWhenCast = 2, MaxDurationInRounds = 1 };
+        var effect = new StatusEffect { RoundWhenCast = 2, MaxDurationInRoundsOverride = 1 };
 
         var remainingRounds = _statusRulesEngine.CalculateRemainingRounds(effect);
 
         Assert.That(effect.RoundWhenCast > _state.CurrentRound);
-        Assert.That(remainingRounds == 0);
+        Assert.That(remainingRounds,Is.EqualTo(0));
     }
 }

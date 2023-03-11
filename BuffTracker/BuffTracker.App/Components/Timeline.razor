@@ -2,8 +2,8 @@
 @inject TimelineEngine TimelineEngine;
 
 <div class="container">
-    <h3>Timeline</h3>
-    <p role="status">Current Round: @BuffTrackerState.CurrentRound</p>
+    <h1>Timeline</h1>
+    <h3 role="status">Current Round: @BuffTrackerState.CurrentRound</h3>
     <button class="btn btn-primary" @onclick="@TimelineEngine.IncrementRound">Add Round</button>
     <button class="btn btn-primary" @onclick="@TimelineEngine.DecrementRound">Subtract Round</button>
 </div>
