@@ -96,4 +96,29 @@ public class StatusRulesEngineTests
 
         Assert.That(remainingRounds, Is.EqualTo(0));
     }
+    
+    [Test]
+    public void FutureBuff_DisplaysCorrectly()
+    {
+        _state.CurrentRound = 1;
+        var effect = new StatusEffect { RoundWhenCast = 2, DurationUnit = DurationUnit.Rounds, UnitRatio = 1 };
+        var displayedDuration = _statusRulesEngine.DisplayRemainingRounds(effect);
+
+        Assert.That(effect.RoundWhenCast, Is.GreaterThan(_state.CurrentRound));
+        Assert.That(displayedDuration, Is.EqualTo("not yet taken effect"));
+    }
+
+    [Test]
+    public void ExpiringBuff_DisplaysCorrectly()
+    {
+        _state.CurrentRound = 2;
+        var effect = new StatusEffect { RoundWhenCast = 1, CasterLevel = 1, DurationUnit = DurationUnit.Rounds, UnitRatio = 1 };
+
+        var remainingRounds = _statusRulesEngine.CalculateRemainingRounds(effect);
+        var displayedDuration = _statusRulesEngine.DisplayRemainingRounds(effect);
+
+        Assert.That(remainingRounds,Is.EqualTo(0));
+        Assert.That(displayedDuration, Is.EqualTo("expired at the start of your turn"));
+    }
+
 }

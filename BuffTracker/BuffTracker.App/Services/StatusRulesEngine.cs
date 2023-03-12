@@ -25,6 +25,9 @@ namespace BuffTracker.App.Services
 
             int remainingRounds = CalculateRemainingRounds(effect);
 
+            if (_appState.CurrentRound < effect.RoundWhenCast)
+                return "not yet taken effect";
+
             // expired?
             if (remainingRounds < 0)
             {
@@ -32,7 +35,7 @@ namespace BuffTracker.App.Services
             }
             else if (remainingRounds == 0)
             {
-                return "not yet taken effect";
+                return "expired at the start of your turn";
             }
 
 
@@ -85,11 +88,11 @@ namespace BuffTracker.App.Services
 
             // Otherwise, calculate the amount from the duration and caster level
             if (effect.CasterLevel is null)
-                return 0;
+                throw new NullReferenceException($"{nameof(effect.CasterLevel)} is null");
             if (effect.DurationUnit is null)
-                return 0;
+                throw new NullReferenceException($"{nameof(effect.DurationUnit)} is null");
             if (effect.UnitRatio is null)
-                return 0;
+                throw new NullReferenceException($"{nameof(effect.UnitRatio)} is null");
 
             int maxRounds = CalcMaxDuration(effect.CasterLevel.Value, effect.DurationUnit.Value, effect.UnitRatio.Value);
 
