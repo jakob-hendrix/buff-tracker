@@ -2,7 +2,8 @@
 
 public class StatusEffect
 {
-    public string Name { get; set; }
+    public string Name { get; 
+        set; }
     public string? EffectSource { get; set; }
     public string? EffectDescription { get; set; }
     public int? CasterLevel { get; set; }
@@ -10,7 +11,8 @@ public class StatusEffect
     public string? Notes { get; set; }
     public string? URL { get; set; }
     //public string DurationDescription { get; set; }
-    public DurationUnit? DurationUnit { get; set; } = Models.DurationUnit.Rounds;
+    public DurationUnit? DurationUnit { get; set; } = 
+        Models.DurationUnit.Rounds;
     public int? UnitRatio { get; set; }
     public bool IsActive { get; set; }
     public bool IsDebuff { get; set; }

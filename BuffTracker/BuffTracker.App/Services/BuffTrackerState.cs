@@ -6,33 +6,23 @@ namespace BuffTracker.App.Services;
 
 public class BuffTrackerState : NotifyPropertyChangedBase
 {
+    private readonly ILogger<BuffTrackerState> _logger;
     private readonly ILocalStorageService _localStorage;
     private int _currentRound;
     private List<StatusEffectViewModel> _statusEffectViewModels;
 
-    public BuffTrackerState(ILocalStorageService localStorage)
+    public BuffTrackerState(ILogger<BuffTrackerState> logger,ILocalStorageService localStorage)
     {
+        _logger = logger;
         _localStorage = localStorage;
 
-        LoadState();
-
-        if (StatusEffects is null)
+        _localStorage.Changed += (sender, e) =>
         {
-            var statusSeeds = new List<StatusEffect>
-        {
-            new StatusEffect { Name = "Haste", RoundWhenCast = 1, URL = @"https://www.aonprd.com/SpellDisplay.aspx?ItemName=Haste", SpellLevel = 3, CasterLevel = 3, DurationUnit = DurationUnit.Rounds, UnitRatio = 1},
-            new StatusEffect { Name = "Staggered", MaxDurationInRoundsOverride = 1, RoundWhenCast = 2}
+            _logger.LogDebug($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
+            Console.WriteLine($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
         };
 
-            StatusEffects = new();
-
-            foreach (var statusEffect in statusSeeds)
-            {
-                StatusEffects.Add(new StatusEffectViewModel(statusEffect));
-            }
-        }
-
-        CurrentRound = 0;
+        _statusEffectViewModels = new List<StatusEffectViewModel>();
     }
 
     public int CurrentRound
@@ -57,19 +47,50 @@ public class BuffTrackerState : NotifyPropertyChangedBase
 
     //https://github.com/Blazored/LocalStorage/blob/main/samples/BlazorWebAssembly/Pages/Index.razor
 
-    private void LoadState()
+    public async Task LoadState()
     {
-        // look in local storage for previous state
+        try
+        {
+            var savedEffects = await _localStorage.GetItemAsync<List<StatusEffectViewModel>>(nameof(StatusEffects));
+            if (savedEffects is null || savedEffects.Count == 0)
+            {
+                SeedStatusEffects();
+            }
+        }
+        catch (Exception)
+        {
+            _logger.LogError($"Error reading {nameof(StatusEffects)} from local storage");
+            SeedStatusEffects();
+        }
     }
-
+    
     public void SaveState()
     {
-        // save the current state to local storage
+        _localStorage.SetItemAsync(nameof(CurrentRound), CurrentRound);
+        _localStorage.SetItemAsync(nameof(StatusEffects), StatusEffects);
     }
 
-    public void ClearState()
+    public async Task ClearState()
     {
         // clear browser storage
+        await _localStorage.ClearAsync();
     }
 
+    private void SeedStatusEffects()
+    {
+        var statusSeeds = new List<StatusEffect>
+        {
+            new StatusEffect { Name = "Haste", RoundWhenCast = 1, URL = @"https://www.aonprd.com/SpellDisplay.aspx?ItemName=Haste", SpellLevel = 3, CasterLevel = 3, DurationUnit = DurationUnit.Rounds, UnitRatio = 1 },
+            new StatusEffect { Name = "Staggered", MaxDurationInRoundsOverride = 1, RoundWhenCast = 2 }
+        };
+
+        StatusEffects = new();
+
+        foreach (var statusEffect in statusSeeds)
+        {
+            StatusEffects.Add(new StatusEffectViewModel(statusEffect));
+        }
+
+        CurrentRound = 0;
+    }
 }
