@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using BuffTracker.App;
 using BuffTracker.App.Services;
 using BuffTracker.App.ViewModels;
@@ -12,6 +13,9 @@ builder.Services.AddSingleton<BuffTrackerViewModel>();
 builder.Services.AddSingleton<BuffTrackerState>();
 builder.Services.AddSingleton<TimelineEngine>();
 builder.Services.AddSingleton<StatusRulesEngine>();
+
+builder.Services.AddBlazoredLocalStorageAsSingleton();
+
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 await builder.Build().RunAsync();
