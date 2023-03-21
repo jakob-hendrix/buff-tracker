@@ -5,7 +5,15 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuffTracker.App", "BuffTracker.App\BuffTracker.App.csproj", "{78522053-56C9-4594-B2A1-395391BC73F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffTracker.Tests", "BuffTracker.Tests\BuffTracker.Tests.csproj", "{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuffTracker.Tests", "BuffTracker.Tests\BuffTracker.Tests.csproj", "{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffTracker.ViewModels", "BuffTracker.ViewModels\BuffTracker.ViewModels.csproj", "{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffTracker.Shared", "BuffTracker.Shared\BuffTracker.Shared.csproj", "{9DAED2C5-B470-4AAD-928F-29D06DD8691B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{06F882F0-1F58-450E-A79D-55F3529FE1F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{3BB7A7D9-6A2A-40E9-BDD2-A997505CF401}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,23 @@ Global
 		{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DAED2C5-B470-4AAD-928F-29D06DD8691B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DAED2C5-B470-4AAD-928F-29D06DD8691B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DAED2C5-B470-4AAD-928F-29D06DD8691B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DAED2C5-B470-4AAD-928F-29D06DD8691B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{78522053-56C9-4594-B2A1-395391BC73F4} = {3BB7A7D9-6A2A-40E9-BDD2-A997505CF401}
+		{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8} = {06F882F0-1F58-450E-A79D-55F3529FE1F2}
+		{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C} = {3BB7A7D9-6A2A-40E9-BDD2-A997505CF401}
+		{9DAED2C5-B470-4AAD-928F-29D06DD8691B} = {3BB7A7D9-6A2A-40E9-BDD2-A997505CF401}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {96313BF1-22DD-4E2C-828E-456B57C01EF0}

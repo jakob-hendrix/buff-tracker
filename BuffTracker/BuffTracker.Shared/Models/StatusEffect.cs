@@ -1,9 +1,8 @@
-﻿namespace BuffTracker.App.Models;
+﻿namespace BuffTracker.Shared.Models;
 
 public class StatusEffect
 {
-    public string Name { get; 
-        set; }
+    public string Name { get; set; }
     public string? EffectSource { get; set; }
     public string? EffectDescription { get; set; }
     public int? CasterLevel { get; set; }

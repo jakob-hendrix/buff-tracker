@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuffTracker.Shared\BuffTracker.Shared.csproj" />
+    <ProjectReference Include="..\BuffTracker.ViewModels\BuffTracker.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\css\app.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

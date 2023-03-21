@@ -1,13 +1,13 @@
-﻿using BuffTracker.App.Models;
-using BuffTracker.App.Services;
-using BuffTracker.App.ViewModels;
+﻿using BuffTracker.App;
+using BuffTracker.Shared.Models;
+using BuffTracker.ViewModels;
 
 namespace BuffTracker.Tests.ViewModels;
 
 [TestFixture]
 public class StatusEffectViewModelTests
 {
-    private BuffTrackerState _state;
+    private AppState _state;
     private StatusEffectViewModel _viewModel;
     private StatusEffect _effect;
 

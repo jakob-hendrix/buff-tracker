@@ -1,4 +1,4 @@
-﻿namespace BuffTracker.App.Models;
+﻿namespace BuffTracker.Shared.Models;
 
 public enum DurationUnit
 {
@@ -9,7 +9,7 @@ public enum DurationUnit
     Permanent
 }
 
-static class DurationUnitMethods
+public static class DurationUnitMethods
 {
     public static string DurationUnitToString(int amount, DurationUnit unit)
     {

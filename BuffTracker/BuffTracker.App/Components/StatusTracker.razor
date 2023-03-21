@@ -1,4 +1,9 @@
-﻿<div class="container">
+﻿@inject AppState AppState;
+@using BuffTracker.Shared.Models
+@using BuffTracker.ViewModels
+@implements IDisposable
+
+<div class="container">
     <h3>Buffs & Conditions</h3>
     <table class="table table-striped table-bordered">
         <thead>
@@ -19,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var effect in ViewModel.AppState.StatusEffects)
+        @foreach (var effect in AppState.StatusEffects)
         {
             if (effect.IsBeingEdited)
             {
@@ -63,7 +68,7 @@
                     <td>
                         <input type="number" class="form-control" placeholder="Enter the round the effect began" @bind="@effect.StatusEffect.RoundWhenCast" min="0" />
                     </td>
-                    <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect)</td>
+                    <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect, AppState.CurrentRound)</td>
                     <td>
                         <input type="text" class="form-control" placeholder="Enter a URL" @bind="@effect.StatusEffect.URL" />
                     </td>
@@ -91,7 +96,7 @@
                     <td>@effect.DisplayDuration()</td>
                     <td>@effect.StatusEffect.MaxDurationInRoundsOverride</td>
                     <td>@effect.StatusEffect.RoundWhenCast</td>
-                    <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect)</td>
+                    <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect, AppState.CurrentRound)</td>
                     @if (!string.IsNullOrEmpty(@effect.StatusEffect.URL))
                     {
                         <td><a href="@(effect.StatusEffect.URL)" target="_blank">Link</a></td>
@@ -117,7 +122,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await ViewModel.AppState.LoadState();
+        AppState.StateChanged += StateHasChanged;
     }
 
     private void EnableEditing(bool flag, StatusEffectViewModel effect)
@@ -126,7 +131,7 @@
     }
     private void RemoveStatus(StatusEffectViewModel effect)
     {
-        ViewModel.AppState.StatusEffects.Remove(effect);
+        AppState.StatusEffects.Remove(effect);
     }
 
     private void AddNewEffect()
@@ -134,11 +139,18 @@
         var newEffect = new StatusEffect();
         if (newEffect.RoundWhenCast == 0)
         {
-            newEffect.RoundWhenCast = ViewModel.AppState.CurrentRound;
+            newEffect.RoundWhenCast = AppState.CurrentRound;
         }
         var newViewModel = new StatusEffectViewModel(newEffect);
-        ViewModel.AppState.StatusEffects.Add(newViewModel);
+        AppState.StatusEffects.Add(newViewModel);
 
         // TODO: don't allow a new item to be added if the bottom item has blank fields
     }
+
+    public void Dispose()
+    {
+        AppState.SaveState();
+        AppState.StateChanged -= StateHasChanged;
+    }
+
 }

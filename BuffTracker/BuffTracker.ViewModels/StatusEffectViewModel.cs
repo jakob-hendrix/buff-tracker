@@ -1,6 +1,6 @@
-﻿using BuffTracker.App.Models;
+﻿using BuffTracker.Shared.Models;
 
-namespace BuffTracker.App.ViewModels
+namespace BuffTracker.ViewModels
 {
     public class StatusEffectViewModel
     {
