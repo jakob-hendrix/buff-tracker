@@ -53,11 +53,15 @@ public class AppState
         try
         {
             // todo: get list of status effects, not the view model
-            int round = await localStorage.GetItemAsync<int>(nameof(CurrentRound));
-            var savedEffects = await localStorage.GetItemAsync<List<StatusEffectViewModel>>(nameof(StatusEffects));
-            if (savedEffects is null || savedEffects.Count == 0)
+            CurrentRound = await localStorage.GetItemAsync<int>(nameof(CurrentRound));
+            statusEffectViewModels = await localStorage.GetItemAsync<List<StatusEffectViewModel>>(nameof(StatusEffects));
+            if (statusEffectViewModels is null || statusEffectViewModels.Count == 0)
             {
                 SeedStatusEffects();
+            }
+            else
+            {
+                
             }
         }
         catch (Exception)
