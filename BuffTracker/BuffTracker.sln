@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuffTracker.App", "BuffTrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuffTracker.Tests", "BuffTracker.Tests\BuffTracker.Tests.csproj", "{ABCE2F05-0CC4-4AE8-ADB6-012CF83688E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffTracker.ViewModels", "BuffTracker.ViewModels\BuffTracker.ViewModels.csproj", "{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuffTracker.ViewModels", "BuffTracker.ViewModels\BuffTracker.ViewModels.csproj", "{F5D09227-DBB8-4CD0-AD62-1F3CB465CE0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffTracker.Shared", "BuffTracker.Shared\BuffTracker.Shared.csproj", "{9DAED2C5-B470-4AAD-928F-29D06DD8691B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuffTracker.Shared", "BuffTracker.Shared\BuffTracker.Shared.csproj", "{9DAED2C5-B470-4AAD-928F-29D06DD8691B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{06F882F0-1F58-450E-A79D-55F3529FE1F2}"
 EndProject

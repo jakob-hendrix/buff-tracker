@@ -11,11 +11,16 @@ public class AppState
     private readonly ILocalStorageService localStorage;
     private int currentRound;
     private List<StatusEffectViewModel> statusEffectViewModels;
+    private bool isLoading;
 
     public event Action StateChanged;
 
     public AppState(ILogger<AppState> logger,ILocalStorageService localStorage)
     {
+        isLoading = true;
+        currentRound = 0;
+        statusEffectViewModels = new List<StatusEffectViewModel>();
+
         this.logger = logger;
         this.localStorage = localStorage;
 
@@ -24,26 +29,24 @@ public class AppState
             this.logger.LogDebug($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
             Console.WriteLine($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
         };
+    }
 
-        statusEffectViewModels = new List<StatusEffectViewModel>();
+    public bool IsLoading
+    {
+        get => isLoading;
+        set => SetProperty(ref isLoading, value);
     }
 
     public int CurrentRound
     {
         get => currentRound;
-        set
-        {
-            SetProperty(ref currentRound, value);
-        }
+        set => SetProperty(ref currentRound, value);
     }
 
     public List<StatusEffectViewModel> StatusEffects
     {
         get => statusEffectViewModels;
-        set
-        {
-            SetProperty(ref statusEffectViewModels, value);
-        }
+        set => SetProperty(ref statusEffectViewModels, value);
     }
 
     //https://github.com/Blazored/LocalStorage/blob/main/samples/BlazorWebAssembly/Pages/Index.razor
@@ -69,6 +72,8 @@ public class AppState
             logger.LogError($"Error reading {nameof(StatusEffects)} from local storage");
             SeedStatusEffects();
         }
+
+        IsLoading = false;
     }
     
     public void SaveState()
