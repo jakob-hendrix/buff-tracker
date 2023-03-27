@@ -1,5 +1,7 @@
-﻿@inject BuffTrackerState BuffTrackerState
-@inject TimelineEngine TimelineEngine;
+﻿@inject AppState AppState;
+@inject TimelineViewModel ViewModel;
+@using BuffTracker.ViewModels
+@implements IDisposable
 
 <div class="container">
     <h1>Timeline</h1>
@@ -7,12 +9,23 @@
     @*<h3 role="status">Current Round: @BuffTrackerState.CurrentRound</h3>*@
     <input  class="form-control form-control-lg" type="number" step="any" 
             style="width: 10rem"
-            @bind-value:event="onchange" @bind-value=@BuffTrackerState.CurrentRound />
-    <button class="btn btn-primary" @onclick="@TimelineEngine.IncrementRound">Add Round</button>
-    <button class="btn btn-primary" @onclick="@TimelineEngine.DecrementRound">Subtract Round</button>
+           @bind-value:event="onchange" @bind-value=@AppState.CurrentRound />
+    <button class="btn btn-primary" @onclick="@AddRound">Add Round</button>
+    <button class="btn btn-primary" @onclick="@SubtractRound">Subtract Round</button>
 </div>
 
 @code {
-    [CascadingParameter(Name = "BuffTrackerViewModel")]
-    BuffTrackerViewModel ViewModel { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        AppState.StateChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AppState.SaveState();
+        AppState.StateChanged -= StateHasChanged;
+    }
+
+    private void AddRound() => AppState.CurrentRound = ViewModel.IncrementRound(AppState.CurrentRound);
+    private void SubtractRound() => AppState.CurrentRound = ViewModel.DecrementRound(AppState.CurrentRound);
 }

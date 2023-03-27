@@ -1,138 +1,31 @@
-﻿<div class="container">
-    <h3>Buffs & Conditions</h3>
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Edit</th>
-            <th>Name</th>
-            <th>Active?</th>
-            <th>Source</th>
-            <th>Spell Level</th>
-            <th>CL</th>
-            <th>Duration Amount</th>
-            <th>Duration Unit</th>
-            <th>Duration</th>
-            <th>Duration Override (Rounds)</th>
-            <th>Round When Cast</th>
-            <th>Remaining Duration</th>
-            <th>URL</th>
-        </tr>
-        </thead>
-        <tbody>
-            @foreach (var effect in ViewModel.AppState.StatusEffects)
-            {
-                if (effect.IsBeingEdited)
-                {
-                    <tr>
-                        <td>
-                            <div>
-                                <button type="button" class="btn btn-link" style="background-color:aqua" @onclick="() => EnableEditing(false, effect)"></button>
-                                <button @onclick="() => RemoveStatus(effect)">X</button>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" placeholder="Give the effect a name" @bind="@effect.StatusEffect.Name" />
-                        </td>
-                        <td>
-                            <input type="checkbox" @bind="@effect.StatusEffect.IsActive" />
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" placeholder="Who or what caused this effect?" @bind="@effect.StatusEffect.EffectSource" />
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" placeholder="Enter the spell level" @bind="@effect.StatusEffect.SpellLevel" min="0" max="65535" />
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" placeholder="Enter the caster level" @bind="@effect.StatusEffect.CasterLevel" min="0" max="100" />
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" placeholder="Enter duration amount per unit" @bind="@effect.StatusEffect.UnitRatio" min="0" max="100" />
-                        </td>
-                        <td>
-                            <InputSelect @bind-Value="@effect.StatusEffect.DurationUnit">
-                                @foreach (var unit in Enum.GetValues(typeof(DurationUnit)))
-                                {
-                                    <option value="@unit">@unit</option>
-                                }
-                            </InputSelect>
-                        </td>
-                        <td>@effect.DisplayDuration()</td>
-                        <td>
-                            <input type="number" class="form-control" placeholder="Enter the duration in rounds" @bind="@effect.StatusEffect.MaxDurationInRoundsOverride" min="0" max="65535" />
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" placeholder="Enter the round the effect began" @bind="@effect.StatusEffect.RoundWhenCast" min="0" />
-                        </td>
-                        <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect)</td>
-                        <td>
-                            <input type="text" class="form-control" placeholder="Enter a URL" @bind="@effect.StatusEffect.URL" />
-                        </td>
-                    </tr>
+﻿@inject AppState AppState;
+@using BuffTracker.Shared.Models
+@using BuffTracker.ViewModels
+@implements IDisposable
 
-                }
-                else
-                {
-                    <tr>
-                        <td>
-                            <div>
-                                <button type="button" class="btn btn-link" style="background-color:aqua" @onclick="() => EnableEditing(true, effect)"></button>
-                                <button @onclick="() => RemoveStatus(effect)">X</button>
-                            </div>
-                        </td>
-                        <td>@effect.StatusEffect.Name</td>
-                        <td>
-                            <input type="checkbox" @bind="@effect.StatusEffect.IsActive" />
-                        </td>
-                        <td>@effect.StatusEffect.EffectSource</td>
-                        <td>@effect.StatusEffect.SpellLevel</td>
-                        <td>@effect.StatusEffect.CasterLevel</td>
-                        <td>@effect.StatusEffect.UnitRatio</td>
-                        <td>@effect.StatusEffect.DurationUnit</td>
-                        <td>@effect.DisplayDuration()</td>
-                        <td>@effect.StatusEffect.MaxDurationInRoundsOverride</td>
-                        <td>@effect.StatusEffect.RoundWhenCast</td>
-                        <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect)</td>
-                        @if (!string.IsNullOrEmpty(@effect.StatusEffect.URL))
-                        {
-                            <td><a href="@(effect.StatusEffect.URL)" target="_blank">Link</a></td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-    <button @onclick="() => AddNewEffect()">Add new effect</button>
-    <button> Save To File</button>
-    <button> Load From File</button>
-</div>
+<CascadingValue Value="@ViewModel" Name="BuffTrackerViewModel">
+    @if (AppState.IsLoading)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <StatusList/>
+    }
+</CascadingValue>
 
 @code {
     [CascadingParameter(Name = "BuffTrackerViewModel")]
     BuffTrackerViewModel ViewModel { get; set; }
 
-    private void EnableEditing(bool flag, StatusEffectViewModel effect)
+    protected override async Task OnInitializedAsync()
     {
-        effect.IsBeingEdited = flag;
-    }
-    private void RemoveStatus(StatusEffectViewModel effect)
-    {
-        ViewModel.AppState.StatusEffects.Remove(effect);
+        AppState.StateChanged += StateHasChanged;
     }
 
-    private void AddNewEffect()
+    public void Dispose()
     {
-        var newEffect = new StatusEffect();
-        if (newEffect.RoundWhenCast == 0)
-        {
-            newEffect.RoundWhenCast = ViewModel.AppState.CurrentRound;
-        }
-        var newViewModel = new StatusEffectViewModel(newEffect);
-        ViewModel.AppState.StatusEffects.Add(newViewModel);
-
-        // TODO: don't allow a new item to be added if the bottom item has blank fields
+        AppState.StateChanged -= StateHasChanged;
     }
+
 }

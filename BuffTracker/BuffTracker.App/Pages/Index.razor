@@ -1,6 +1,7 @@
 ﻿@page "/"
+@using BuffTracker.ViewModels
 
-@using System.ComponentModel;
+@inject AppState AppState;
 @inject BuffTrackerViewModel BuffTrackerViewModel
 @implements IDisposable
 
@@ -13,27 +14,16 @@
 
 
 @code{
-    protected override async Task OnInitializedAsync()
+    protected override async void OnInitialized()
     {
-        BuffTrackerViewModel.AppState.PropertyChanged += async (sender, e) => 
-            await InvokeAsync(() => 
-            { 
-                StateHasChanged(); 
-            });
-        await base.OnInitializedAsync();
-
-    }
-
-    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
-    {
-        await InvokeAsync(() =>
-        {
-            StateHasChanged();
-        });
+        AppState.LoadState();
+        Console.WriteLine("App state loaded");
+        StateHasChanged();
     }
 
     public void Dispose()
     {
-        BuffTrackerViewModel.AppState.PropertyChanged -= OnPropertyChangedHandler;
+        AppState.SaveState();
     }
+
 }

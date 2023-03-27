@@ -1,24 +1,24 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace BuffTracker.App.Models;
+namespace BuffTracker.Shared;
 
 public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-    protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+    protected bool Set<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
-        if (Equals(storage, value))
-        {
+        if (EqualityComparer<T>.Default.Equals(field, value)) 
             return false;
-        }
-        storage = value;
-        NotifyPropertyChanged(propertyName);
+
+        field = value;
+        OnPropertyChanged(propertyName);
         return true;
     }
 }
