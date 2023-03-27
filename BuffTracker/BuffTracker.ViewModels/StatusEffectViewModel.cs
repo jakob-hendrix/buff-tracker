@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using BuffTracker.Shared.Models;
+﻿using BuffTracker.Shared.Models;
 
 namespace BuffTracker.ViewModels
 {

@@ -1,6 +1,8 @@
 ﻿@inject AppState AppState;
 @using BuffTracker.Shared.Models
 @using BuffTracker.ViewModels
+@using System.ComponentModel
+@using System.Collections.Specialized
 @implements IDisposable
 
 <div class="container">
@@ -122,6 +124,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        AppState.StatusEffects.CollectionChanged += OnCollectionChanged;
         AppState.StateChanged += StateHasChanged;
     }
 
@@ -136,6 +139,7 @@
     }
     private void RemoveStatus(StatusEffectViewModel effect)
     {
+        effect.StatusEffect.PropertyChanged -= HandleEffectChanged;
         AppState.StatusEffects.Remove(effect);
     }
 
@@ -146,7 +150,9 @@
         {
             newEffect.RoundWhenCast = AppState.CurrentRound;
         }
+        newEffect.PropertyChanged += HandleEffectChanged;
         var newViewModel = new StatusEffectViewModel(newEffect);
+        newViewModel.IsBeingEdited = true;
         AppState.StatusEffects.Add(newViewModel);
 
         // TODO: don't allow a new item to be added if the bottom item has blank fields
@@ -156,6 +162,28 @@
     {
         AppState.SaveState();
         AppState.StateChanged -= StateHasChanged;
+        AppState.StatusEffects.CollectionChanged -= OnCollectionChanged;
+        foreach (var effect in AppState.StatusEffects)
+        {
+            effect.StatusEffect.PropertyChanged -= HandleEffectChanged;
+        }
+    }
+    
+    protected void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (sender is not null)
+        {
+            AppState.SaveState();
+            StateHasChanged();
+        }
     }
 
+    private void HandleEffectChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not null)
+        {
+            AppState.SaveState();
+            StateHasChanged();
+        }
+    }
 }
