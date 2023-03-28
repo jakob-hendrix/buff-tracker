@@ -11,7 +11,7 @@ public class StatusRulesEngine
             return "endless";
         }
 
-        if (effect.MaxDurationInRoundsOverride is null && (effect.CasterLevel is null || effect.DurationUnit is null || effect.UnitRatio is null))
+        if (effect.MaxDurationInRoundsOverride is null && (effect.CasterLevel is null || effect.UnitRatio is null))
         {
             return "Unable to calculate";
         }
@@ -82,12 +82,11 @@ public class StatusRulesEngine
         // Otherwise, calculate the amount from the duration and caster level
         if (effect.CasterLevel is null)
             throw new NullReferenceException($"{nameof(effect.CasterLevel)} is null");
-        if (effect.DurationUnit is null)
-            throw new NullReferenceException($"{nameof(effect.DurationUnit)} is null");
+
         if (effect.UnitRatio is null)
             throw new NullReferenceException($"{nameof(effect.UnitRatio)} is null");
 
-        int maxRounds = CalcMaxDuration(effect.CasterLevel.Value, effect.DurationUnit.Value, effect.UnitRatio.Value);
+        int maxRounds = CalcMaxDuration(effect.CasterLevel.Value, effect.DurationUnit, effect.UnitRatio.Value);
 
         if (effect.RoundWhenCast <= currentRound)
         {

@@ -9,7 +9,7 @@ public class StatusEffect : NotifyPropertyChangedBase
     private int? spellLevel;
     private string? notes;
     private string? url;
-    private DurationUnit? durationUnit = Models.DurationUnit.Rounds;
+    private DurationUnit durationUnit = DurationUnit.Rounds;
     private int? unitRatio;
     private bool isActive;
     private bool isDebuff;
@@ -59,7 +59,7 @@ public class StatusEffect : NotifyPropertyChangedBase
     }
 
     //public string DurationDescription { get; set; }
-    public DurationUnit? DurationUnit
+    public DurationUnit DurationUnit
     {
         get => durationUnit;
         set => Set(ref durationUnit, value);
