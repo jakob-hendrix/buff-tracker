@@ -1,0 +1,130 @@
+﻿@inject AppState AppState;
+@using BuffTracker.Shared.Models
+@using BuffTracker.ViewModels
+@using System.ComponentModel
+@using System.Collections.Specialized
+@implements IDisposable
+
+<MudTable Items="AppState.StatusEffects" Hover="true" ReadOnly="false">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Spell Level</MudTh>
+        <MudTh>CL</MudTh>
+        <MudTh>Round When Cast</MudTh>
+        <MudTh>Duration Amount</MudTh>
+        <MudTh>Duration Unit</MudTh>
+        <MudTh>Duration</MudTh>
+        <MudTh>Remaining Duration</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.StatusEffect.Name</MudTd>
+        <MudTd DataLabel="Spell Level">@context.StatusEffect.SpellLevel</MudTd>
+        <MudTd DataLabel="CL">@context.StatusEffect.CasterLevel</MudTd>
+        <MudTd DataLabel="Round When Cast">@context.StatusEffect.RoundWhenCast</MudTd>
+        <MudTd DataLabel="Duration Amount">@context.StatusEffect.UnitRatio</MudTd>
+        <MudTd DataLabel="Duration Unit">@context.StatusEffect.DurationUnit</MudTd>
+        <MudTd DataLabel="Duration">@context.DisplayDuration</MudTd>
+        <MudTd DataLabel="Remaining Duration">@ViewModel.StatusRulesEngine.DisplayRemainingRounds(@context.StatusEffect, AppState.CurrentRound)</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="@context.StatusEffect.Name" Required/>
+        </MudTd>
+        <MudTd DataLabel="Spell Level">
+            <MudNumericField @bind-Value="@context.StatusEffect.SpellLevel" Required/>
+        </MudTd>
+        <MudTd DataLabel="CL">
+            <MudNumericField @bind-Value="@context.StatusEffect.CasterLevel" Required />
+        </MudTd>
+        <MudTd DataLabel="Round When Cast">
+            <MudNumericField @bind-Value="@context.StatusEffect.RoundWhenCast" Required />
+        </MudTd>
+        <MudTd DataLabel="Duration Amount">
+            <MudNumericField @bind-Value="@context.StatusEffect.UnitRatio" Required />
+        </MudTd>
+        <MudTd DataLabel="Duration Unit">
+            <MudSelect Class="mud-select-table"
+                       T="DurationUnit"
+                       @bind-Value="@context.StatusEffect.DurationUnit">
+                
+                @foreach (var unit in Enum.GetValues(typeof(DurationUnit)))
+                {
+                    <MudSelectItem Value="@unit.ToString()"/>
+                }
+            </MudSelect>
+            
+        </MudTd>
+        <MudTd DataLabel="Duration">@context.DisplayDuration</MudTd>
+        <MudTd DataLabel="Remaining Duration">@ViewModel.StatusRulesEngine.DisplayRemainingRounds(@context.StatusEffect, AppState.CurrentRound)</MudTd>
+    </RowEditingTemplate>
+</MudTable>
+
+@code {
+    [CascadingParameter(Name = "BuffTrackerViewModel")]
+    BuffTrackerViewModel ViewModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppState.StatusEffects.CollectionChanged += OnCollectionChanged;
+        AppState.StateChanged += StateHasChanged;
+    }
+
+    private void HandleFieldChange()
+    {
+
+    }
+
+    private void EnableEditing(bool flag, StatusEffectViewModel effect)
+    {
+        effect.IsBeingEdited = flag;
+    }
+    private void RemoveStatus(StatusEffectViewModel effect)
+    {
+        effect.StatusEffect.PropertyChanged -= HandleEffectChanged;
+        AppState.StatusEffects.Remove(effect);
+    }
+
+    private void AddNewEffect()
+    {
+        var newEffect = new StatusEffect();
+        if (newEffect.RoundWhenCast == 0)
+        {
+            newEffect.RoundWhenCast = AppState.CurrentRound;
+        }
+        newEffect.PropertyChanged += HandleEffectChanged;
+        var newViewModel = new StatusEffectViewModel(newEffect);
+        newViewModel.IsBeingEdited = true;
+        AppState.StatusEffects.Add(newViewModel);
+
+        // TODO: don't allow a new item to be added if the bottom item has blank fields
+    }
+
+    public void Dispose()
+    {
+        AppState.SaveState();
+        AppState.StateChanged -= StateHasChanged;
+        AppState.StatusEffects.CollectionChanged -= OnCollectionChanged;
+        foreach (var effect in AppState.StatusEffects)
+        {
+            effect.StatusEffect.PropertyChanged -= HandleEffectChanged;
+        }
+    }
+
+    protected void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (sender is not null)
+        {
+            AppState.SaveState();
+            StateHasChanged();
+        }
+    }
+
+    private void HandleEffectChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not null)
+        {
+            AppState.SaveState();
+            StateHasChanged();
+        }
+    }
+}

@@ -63,7 +63,7 @@
                                 }
                             </InputSelect>
                         </td>
-                        <td>@effect.DisplayDuration()</td>
+                        <td>@effect.DisplayDuration</td>
                         <td>
                             <input type="number" class="form-control" placeholder="Enter the duration in rounds" @bind="@effect.StatusEffect.MaxDurationInRoundsOverride" min="0" max="65535" />
                         </td>
@@ -95,7 +95,7 @@
                         <td>@effect.StatusEffect.CasterLevel</td>
                         <td>@effect.StatusEffect.UnitRatio</td>
                         <td>@effect.StatusEffect.DurationUnit</td>
-                        <td>@effect.DisplayDuration()</td>
+                        <td>@effect.DisplayDuration</td>
                         <td>@effect.StatusEffect.MaxDurationInRoundsOverride</td>
                         <td>@effect.StatusEffect.RoundWhenCast</td>
                         <td>@ViewModel.StatusRulesEngine.DisplayRemainingRounds(effect.StatusEffect, AppState.CurrentRound)</td>

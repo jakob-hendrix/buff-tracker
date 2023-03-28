@@ -4,14 +4,21 @@
 @implements IDisposable
 
 <div class="container">
-    <h1>Timeline</h1>
+    <MudText>Timeline</MudText>
     
-    @*<h3 role="status">Current Round: @BuffTrackerState.CurrentRound</h3>*@
-    <input  class="form-control form-control-lg" type="number" step="any" 
-            style="width: 10rem"
-           @bind-value:event="onchange" @bind-value=@AppState.CurrentRound />
-    <button class="btn btn-primary" @onclick="@AddRound">Add Round</button>
-    <button class="btn btn-primary" @onclick="@SubtractRound">Subtract Round</button>
+    <MudNumericField @bind-Value="AppState.CurrentRound" 
+                     Label="Round"
+                     Variant="Variant.Outlined"
+                     Min="0"></MudNumericField>
+    <MudButton Variant="Variant.Filled" @onclick="@AddRound">Add Round</MudButton>
+    @if (AppState.CurrentRound > 0)
+    {
+        <MudButton Variant="Variant.Filled" @onclick="@SubtractRound">Remove Round</MudButton>
+    }
+    else
+    {
+        <MudButton Variant="Variant.Filled" @onclick="@SubtractRound" Disabled="true">Remove Round</MudButton>
+    }
 </div>
 
 @code {

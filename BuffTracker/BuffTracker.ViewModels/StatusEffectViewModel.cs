@@ -13,15 +13,14 @@ namespace BuffTracker.ViewModels
         public StatusEffect StatusEffect { get; }
         public bool IsBeingEdited { get; set; }
 
-        public string DisplayDuration()
-        {
-            if (StatusEffect.DurationUnit is null)
-                return "";
+        public string DisplayDuration => ShowDisplayDuration();
 
+        public string ShowDisplayDuration()
+        {
             if (StatusEffect.UnitRatio is null || StatusEffect.UnitRatio == 0)
                 return "";
 
-            return $"{StatusEffect.UnitRatio.Value} {DurationUnitMethods.DurationUnitToString(StatusEffect.UnitRatio.Value, StatusEffect.DurationUnit.Value)}/level";
+            return $"{StatusEffect.UnitRatio.Value} {DurationUnitMethods.DurationUnitToString(StatusEffect.UnitRatio.Value, StatusEffect.DurationUnit)}/level";
         }
     }
 }
